@@ -56,14 +56,6 @@ functions:
           - dynamodb:Scan
           - dynamodb:GetItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TRIPS_TABLE}/index/${self:provider.environment.INDEX_NAME}
-      - Effect: Allow
-        Action:
-          - secretsmanager:GetSecretValue
-        Resource: !Ref Auth0Secret
-      - Effect: Allow
-        Action:
-          - kms:Decrypt
-        Resource: !GetAtt KMSKey.Arn
 
   # TRIP: Configure this function
   CreateTrip:
@@ -83,14 +75,6 @@ functions:
         Action:
           - dynamodb:PutItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TRIPS_TABLE}
-      - Effect: Allow
-        Action:
-          - secretsmanager:GetSecretValue
-        Resource: !Ref Auth0Secret
-      - Effect: Allow
-        Action:
-          - kms:Decrypt
-        Resource: !GetAtt KMSKey.Arn
 
   # TRIP: Configure this function
   UpdateTrip:
@@ -120,14 +104,6 @@ functions:
           - dynamodb:Query
           - dynamodb:Scan
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TRIPS_TABLE}/index/${self:provider.environment.INDEX_NAME}
-      - Effect: Allow
-        Action:
-          - secretsmanager:GetSecretValue
-        Resource: !Ref Auth0Secret
-      - Effect: Allow
-        Action:
-          - kms:Decrypt
-        Resource: !GetAtt KMSKey.Arn
 
 
   # TRIP: Configure this function
@@ -150,14 +126,6 @@ functions:
           - dynamodb:DeleteItem
           - dynamodb:GetItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TRIPS_TABLE}/index/${self:provider.environment.INDEX_NAME}
-      - Effect: Allow
-        Action:
-          - secretsmanager:GetSecretValue
-        Resource: !Ref Auth0Secret
-      - Effect: Allow
-        Action:
-          - kms:Decrypt
-        Resource: !GetAtt KMSKey.Arn
 
 
   # TRIP: Configure this function
@@ -175,14 +143,6 @@ functions:
           - s3:GetObject
         Effect: Allow
         Resource: arn:aws:s3:::${self:provider.environment.S3_BUCKET}/*
-      - Effect: Allow
-        Action:
-          - secretsmanager:GetSecretValue
-        Resource: !Ref Auth0Secret
-      - Effect: Allow
-        Action:
-          - kms:Decrypt
-        Resource: !GetAtt KMSKey.Arn
 
 resources:
   Resources:
