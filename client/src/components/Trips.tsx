@@ -122,12 +122,12 @@ export class Trips extends React.PureComponent<TripsProps, TripsState> {
               color: 'teal',
               labelPosition: 'left',
               icon: 'add',
-              content: 'New task',
+              content: 'New trip',
               onClick: this.onTripCreate
             }}
             fluid
             actionPosition="left"
-            placeholder="To change the world..."
+            placeholder="Albuquerque, New Mexico to Atlanta, Georgia"
             onChange={this.handleNameChange}
           />
         </Grid.Column>

@@ -4,7 +4,7 @@ I intend to build a simple application that allows a user to submit a starting a
 
 # Functionality of the application
 
-I intend to focus on the backend of the application, primarily the trip creation, storage, and retrieval, using AWS Lambda and API Gateway, and the authentication, using OAuth.  I do not intend to provide a frontend, since it is not required for the project, and not a focus of this course.
+I intend to focus on the backend of the application, primarily the trip creation, storage, and retrieval, using AWS Lambda and API Gateway, and the authentication, using OAuth.  I intend to provide only a very basic frontend, based on the one created in the serverless Todo project.
 
 ## Logical Flow
 1. 
