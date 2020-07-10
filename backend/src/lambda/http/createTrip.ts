@@ -1,21 +1,21 @@
 import 'source-map-support/register';
 import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda';
-import { CreateTodoRequest } from '../../requests/CreateTodoRequest';
+import { CreateTripRequest } from '../../requests/CreateTripRequest';
 import * as uuid from 'uuid';
 import { decode } from 'jsonwebtoken';
 import { JwtPayload } from '../../auth/JwtPayload';
 import * as AWS from 'aws-sdk'
 import { createLogger } from '../../utils/logger';
-const logger = createLogger('createTodo');
+const logger = createLogger('createTrip');
 
 const docClient = new AWS.DynamoDB.DocumentClient()
-const todosTable = process.env.TODOS_TABLE
+const tripsTable = process.env.TRIPS_TABLE
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  const newTodo: CreateTodoRequest = JSON.parse(event.body);
+  const newTrip: CreateTripRequest = JSON.parse(event.body);
   logger.info('Creating event: ', event)
 
-  if (!newTodo.name) {
+  if (!newTrip.name) {
     return {
       statusCode: 400,
       body: JSON.stringify({
@@ -24,7 +24,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     };
   }
 
-  const todoId = uuid.v4();
+  const tripId = uuid.v4();
   const authorization = event.headers.Authorization
   const split = authorization.split(' ')
   const jwtToken = split[1]
@@ -33,18 +33,18 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   const createdAt = new Date(Date.now()).toISOString();
   
 
-  const todoItem = {
+  const tripItem = {
     userId,
-    todoId,
+    tripId,
     createdAt,
     done: false,
-    attachmentUrl: `https://${process.env.S3_BUCKET}.s3.amazonaws.com/${todoId}`,
-    ...newTodo
+    attachmentUrl: `https://${process.env.S3_BUCKET}.s3.amazonaws.com/${tripId}`,
+    ...newTrip
   };
 
   await docClient.put({
-    TableName: todosTable,
-    Item: todoItem
+    TableName: tripsTable,
+    Item: tripItem
   }).promise();
 
   return {
@@ -54,7 +54,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
       'Access-Control-Allow-Credentials': true
     },
     body: JSON.stringify({
-      item: todoItem
+      item: tripItem
     })
   };
 }

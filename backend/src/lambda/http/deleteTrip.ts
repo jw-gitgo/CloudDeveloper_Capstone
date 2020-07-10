@@ -4,13 +4,13 @@ import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } f
 import { decode } from 'jsonwebtoken';
 import { JwtPayload } from '../../auth/JwtPayload';
 import { createLogger } from '../../utils/logger';
-const logger = createLogger('deleteTodo');
+const logger = createLogger('deleteTrip');
 
 const docClient = new AWS.DynamoDB.DocumentClient()
-const todosTable = process.env.TODOS_TABLE
+const tripsTable = process.env.TRIPS_TABLE
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  const todoId = event.pathParameters.todoId
+  const tripId = event.pathParameters.tripId
   logger.info('Deleting event: ', event)
 
   const authorization = event.headers.Authorization
@@ -19,18 +19,18 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   const decodedJwt = decode(jwtToken) as JwtPayload
   const userId = decodedJwt.sub;
 
-  // TODO: Update a TODO item with the provided id using values in the "updatedTodo" object
+  // TRIP: Update a TRIP item with the provided id using values in the "updatedTrip" object
 
   //perform the update
   const deleteSuccess = await docClient.delete({
-    TableName: todosTable,
+    TableName: tripsTable,
     Key: {
-      todoId,
+      tripId,
       userId
     }
   }).promise();
 
-  // Check if todo already exists
+  // Check if trip already exists
   if (!(deleteSuccess)) {
     return {
       statusCode: 404,

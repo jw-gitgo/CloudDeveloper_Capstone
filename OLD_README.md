@@ -1,21 +1,21 @@
-# Serverless TODO
+# Serverless TRIP
 
-To implement this project you need to implement a simple TODO application using AWS Lambda and Serverless framework. Search for all the `TODO:` comments in the code to find the placeholders that you need to implement.
+To implement this project you need to implement a simple TRIP application using AWS Lambda and Serverless framework. Search for all the `TRIP:` comments in the code to find the placeholders that you need to implement.
 
 # Functionality of the application
 
-This appliation will allow to create/remove/update/get TODO items. Each TODO item can optionally have an attachment image. Each user only has access to TODO items that he/she has created. 
+This appliation will allow to create/remove/update/get TRIP items. Each TRIP item can optionally have an attachment image. Each user only has access to TRIP items that he/she has created. 
 
 # Functions to be implemented
 
 To implement this project you need to implement the following functions and configure them in the `serverless.yml` file:
 
 * `Auth` - this function should implement a custom authorizer for API Gateway that should be added to all other functions.
-* `GetTodos` - should return all TODOs for a current user. 
-* `CreateTodo` - should create a new TODO for a current user. A shape of data send by a client application to this function can be found in the `CreateTodoRequest.ts` file
-* `UpdateTodo` - should update a TODO item created by a current user. A shape of data send by a client application to this function can be found in the `UpdateTodoRequest.ts` file
-* `DeleteTodo` - should delete a TODO item created by a current user. Expects an id of a TODO item to remove.
-* `GenerateUploadUrl` - returns a presigned url that can be used to upload an attachment file for a TODO item. 
+* `GetTrips` - should return all TRIPs for a current user. 
+* `CreateTrip` - should create a new TRIP for a current user. A shape of data send by a client application to this function can be found in the `CreateTripRequest.ts` file
+* `UpdateTrip` - should update a TRIP item created by a current user. A shape of data send by a client application to this function can be found in the `UpdateTripRequest.ts` file
+* `DeleteTrip` - should delete a TRIP item created by a current user. Expects an id of a TRIP item to remove.
+* `GenerateUploadUrl` - returns a presigned url that can be used to upload an attachment file for a TRIP item. 
 
 All functions are already connected to appropriate events from API gateway
 
@@ -46,11 +46,11 @@ To complete this exercise please follow the best practices from the 6th lesson o
 
 # Suggestions
 
-To store TODO items you might want to use a DynamoDB table with local secondary index(es). A create a local secondary index you need to a create a DynamoDB resource like this:
+To store TRIP items you might want to use a DynamoDB table with local secondary index(es). A create a local secondary index you need to a create a DynamoDB resource like this:
 
 ```yml
 
-TodosTable:
+TripsTable:
   Type: AWS::DynamoDB::Table
   Properties:
     AttributeDefinitions:
@@ -66,7 +66,7 @@ TodosTable:
       - AttributeName: sortKey
         KeyType: RANGE
     BillingMode: PAY_PER_REQUEST
-    TableName: ${self:provider.environment.TODOS_TABLE}
+    TableName: ${self:provider.environment.TRIPS_TABLE}
     LocalSecondaryIndexes:
       - IndexName: ${self:provider.environment.INDEX_NAME}
         KeySchema:
@@ -116,7 +116,7 @@ npm install
 npm run start
 ```
 
-This should start a development server with the React application that will interact with the serverless TODO application.
+This should start a development server with the React application that will interact with the serverless TRIP application.
 
 # Postman collection
 

@@ -1,20 +1,20 @@
 import 'source-map-support/register'
 import * as AWS from 'aws-sdk'
 import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda'
-import { UpdateTodoRequest } from '../../requests/UpdateTodoRequest'
+import { UpdateTripRequest } from '../../requests/UpdateTripRequest'
 import { decode } from 'jsonwebtoken';
 import { JwtPayload } from '../../auth/JwtPayload';
 
 import { createLogger } from '../../utils/logger';
-const logger = createLogger('updateTodo');
+const logger = createLogger('updateTrip');
 
 const docClient = new AWS.DynamoDB.DocumentClient()
-const todosTable = process.env.TODOS_TABLE
+const tripsTable = process.env.TRIPS_TABLE
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   logger.info('Updating event: ', event)
-  const todoId = event.pathParameters.todoId
-  const updatedTodo: UpdateTodoRequest = JSON.parse(event.body)
+  const tripId = event.pathParameters.tripId
+  const updatedTrip: UpdateTripRequest = JSON.parse(event.body)
 
   const authorization = event.headers.Authorization
   const split = authorization.split(' ')
@@ -22,20 +22,20 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   const decodedJwt = decode(jwtToken) as JwtPayload
   const userId = decodedJwt.sub;
 
-  // TODO: Update a TODO item with the provided id using values in the "updatedTodo" object
+  // TRIP: Update a TRIP item with the provided id using values in the "updatedTrip" object
 
   //perform the update
   const updateSuccess = await docClient.update({
-    TableName: todosTable,
+    TableName: tripsTable,
     Key: {
-      todoId,
+      tripId,
       userId
     },
     UpdateExpression: 'set #name = :n, #dueDate = :due, #done = :d',
     ExpressionAttributeValues: {
-      ':n': updatedTodo.name,
-      ':due': updatedTodo.dueDate,
-      ':d': updatedTodo.done
+      ':n': updatedTrip.name,
+      ':due': updatedTrip.dueDate,
+      ':d': updatedTrip.done
     },
     ExpressionAttributeNames: {
       '#name': 'name',
@@ -44,7 +44,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     }
   }).promise();
 
-  // Check if todo already exists
+  // Check if trip already exists
   if (!(updateSuccess)) {
     return {
       statusCode: 404,
@@ -61,7 +61,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
       'Access-Control-Allow-Credentials': true
     },
     body: JSON.stringify({
-      updatedTodo
+      updatedTrip
     })
   }
 }

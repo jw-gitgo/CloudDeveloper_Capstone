@@ -1,9 +1,9 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
-    "title": "todo",
+    "title": "trip",
     "type": "object",
     "properties": {
-        "todoId": { "type": "number" },
+        "tripId": { "type": "number" },
         "createdAt": { "type": "string" },
         "name": { "type": "string" },
         "dueDate": { "type": "string" },
@@ -11,7 +11,7 @@
         "attachmentUrl": { "type": "string" }
     },
     "required": [
-        "todoId"
+        "tripId"
     ],
     "additionalProperties": false
 }

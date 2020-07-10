@@ -4,10 +4,10 @@ import { decode } from 'jsonwebtoken';
 import { JwtPayload } from '../../auth/JwtPayload';
 import * as AWS from 'aws-sdk'
 import { createLogger } from '../../utils/logger';
-const logger = createLogger('getTodos');
+const logger = createLogger('getTrips');
 
 const docClient = new AWS.DynamoDB.DocumentClient()
-const todosTable = process.env.TODOS_TABLE
+const tripsTable = process.env.TRIPS_TABLE
 const indexName = process.env.INDEX_NAME
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
@@ -20,7 +20,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   const userId = decodedJwt.sub;
 
   const result = await docClient.query({
-    TableName: todosTable,
+    TableName: tripsTable,
     IndexName: indexName,
     KeyConditionExpression: 'userId = :userId',
     ExpressionAttributeValues: {
