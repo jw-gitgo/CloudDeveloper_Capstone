@@ -1,10 +1,10 @@
-# Cloud Developer Capstone Project - Driving Conditions App
+# Serverless TODO
 
-I intend to build a simple application that allows a user to submit a starting and ending geolocation, and then returns an optimized driving route, along with the anticipated weather at multiple points during the trip (assuming the user wants to leave now).  It will leverage publicly-available API's for route-finding and weather forecasts, and will allow the user to save defined trips for future retrieval.
+To implement this project you need to implement a simple TODO application using AWS Lambda and Serverless framework. Search for all the `TODO:` comments in the code to find the placeholders that you need to implement.
 
 # Functionality of the application
 
-I intend to focus on the backend of the application, primarily the trip creation, storage, and retrieval, using AWS Lambda and API Gateway, and the authentication, using OAuth.  I do not intend to provide a frontend, 
+This appliation will allow to create/remove/update/get TODO items. Each TODO item can optionally have an attachment image. Each user only has access to TODO items that he/she has created. 
 
 # Functions to be implemented
 
