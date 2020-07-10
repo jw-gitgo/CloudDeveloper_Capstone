@@ -17,7 +17,7 @@ To implement this project you need to implement the following functions and conf
 * `DeleteTodo` - should delete a TODO item created by a current user. Expects an id of a TODO item to remove.
 * `GenerateUploadUrl` - returns a presigned url that can be used to upload an attachment file for a TODO item. 
 
-All functions are already connected to appriate events from API gateway
+All functions are already connected to appropriate events from API gateway
 
 An id of a user can be extracted from a JWT token passed by a client
 
