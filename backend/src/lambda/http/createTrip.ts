@@ -53,7 +53,6 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     userId,
     tripId,
     createdAt,
-    done: false,
     tripIconUrl: `https://${process.env.S3_BUCKET}.s3.amazonaws.com/${tripId}`,
     ...newTrip
   };
