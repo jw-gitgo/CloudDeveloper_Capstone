@@ -31,16 +31,16 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
       tripId,
       userId
     },
-    UpdateExpression: 'set #name = :n, #dueDate = :due, #done = :d',
+    UpdateExpression: 'set #name = :n, #startPoint = :start, #endPoint = :end',
     ExpressionAttributeValues: {
       ':n': updatedTrip.name,
-      ':due': updatedTrip.dueDate,
-      ':d': updatedTrip.done
+      ':start': updatedTrip.startPoint,
+      ':end': updatedTrip.endPoint
     },
     ExpressionAttributeNames: {
       '#name': 'name',
-      '#dueDate': 'dueDate',
-      '#done': 'done'
+      '#startPoint': 'startPoint',
+      '#endPoint': 'endPoint'
     }
   }).promise();
 
