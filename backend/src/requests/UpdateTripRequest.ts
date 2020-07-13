@@ -3,6 +3,6 @@
  */
 export interface UpdateTripRequest {
   name: string
-  dueDate: string
-  done: boolean
+  startPoint: string
+  endPoint: string
 }

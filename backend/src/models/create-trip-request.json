@@ -5,10 +5,13 @@
     "properties": {
         "tripId": { "type": "number" },
         "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" },
         "name": { "type": "string" },
-        "dueDate": { "type": "string" },
-        "done": { "type": "boolean" },
-        "attachmentUrl": { "type": "string" }
+        "startPoint": { "type": "string" },
+        "endPoint": { "type": "string" },
+        "wayPoints": { "type": "string" },
+        "weatherPoints": { "type": "string" },
+        "tripIconUrl": { "type": "string" }
     },
     "required": [
         "tripId"

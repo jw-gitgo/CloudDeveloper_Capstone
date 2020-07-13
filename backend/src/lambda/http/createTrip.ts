@@ -23,6 +23,22 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
       })
     };
   }
+  if (!newTrip.startPoint) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({
+        error: 'starting location is empty'
+      })
+    };
+  }
+  if (!newTrip.endPoint) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({
+        error: 'ending location is empty'
+      })
+    };
+  }
 
   const tripId = uuid.v4();
   const authorization = event.headers.Authorization
@@ -38,7 +54,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     tripId,
     createdAt,
     done: false,
-    attachmentUrl: `https://${process.env.S3_BUCKET}.s3.amazonaws.com/${tripId}`,
+    tripIconUrl: `https://${process.env.S3_BUCKET}.s3.amazonaws.com/${tripId}`,
     ...newTrip
   };
 

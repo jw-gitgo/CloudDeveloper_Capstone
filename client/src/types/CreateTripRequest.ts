@@ -1,4 +1,5 @@
 export interface CreateTripRequest {
   name: string
-  dueDate: string
+  startPoint: string
+  endPoint: string
 }

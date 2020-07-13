@@ -192,8 +192,8 @@ export class Trips extends React.PureComponent<TripsProps, TripsState> {
                   <Icon name="delete" />
                 </Button>
               </Grid.Column>
-              {trip.attachmentUrl && (
-                <Image src={trip.attachmentUrl} size="small" wrapped />
+              {trip.tripIconUrl && (
+                <Image src={trip.tripIconUrl} size="small" wrapped />
               )}
               <Grid.Column width={16}>
                 <Divider />

@@ -4,10 +4,28 @@ I intend to build a simple application that allows a user to submit a starting a
 
 # Functionality of the application
 
-I intend to focus on the backend of the application, primarily the trip creation, storage, and retrieval, using AWS Lambda and API Gateway, and the authentication, using OAuth.  I intend to provide only a very basic frontend, based on the one created in the serverless Todo project.
+I intend to focus on the backend of the application, primarily the trip creation, storage, and retrieval, using AWS Lambda and API Gateway, and the authentication, using OAuth.  I will provide only a very basic frontend, based on the one created in the serverless Todo project.
+
+## Data Structure
+- userId (string) - a unique id for the user, passed by OAuth
+- tripId (string) - a unique id for a defined trip
+- createdAt (string) - date and time when a trip was created
+- updatedAt (string) - date and time trip route & weather details were last refreshed
+- name (string) - name of the trip
+- startPoint (string) - starting point of the trip
+- endPoint (string) - ending point of the trip
+- wayPoints (array of strings) - waypoints along the trip route
+- weatherPoints (array of strings) - corresponding weather at each waypoint
+- tripIconUrl (string) - the URL of the trip icon that a user can optionally upload
 
 ## Logical Flow
-1. 
+1. User logs into application using OAuth - userId is passed to application via browser
+2. getTrips loads all trips for the provided userId
+    - startPoint and endPoint for each trip are passed to OpenRouteService API - wayPoints list is updated
+    - wayPoints are passed to OpenWeatherMap API - weatherPoints list is updated
+    - If both API calls are successful, updatedAt date is updated to the current date and time
+    - If either API call fails, the previous wayPoints, weatherPoints, and updatedAt values are retained
+3. User can create new trip by providing name, startPoint, and endPoint
 
 # Functions to be implemented
 
