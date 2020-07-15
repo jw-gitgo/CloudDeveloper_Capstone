@@ -14,8 +14,9 @@ provider:
     TRIPS_TABLE: jw-trips-table-${self:provider.stage}
     INDEX_NAME: tripId
     S3_BUCKET: jw-udacity-trips-bucket-${self:provider.stage}
-    AUTH_0_SECRET_ID: Auth0Secret-${self:provider.stage}
-    AUTH_0_SECRET_FIELD: auth0Secret
+    ROUTE_API_KEY: 5b3ce3597851110001cf62487a65e678a2e54ec181caf798e4271d99
+    WEATHER_API_KEY: 378b9931e4515a61c129b705606052bc
+
 
 custom:
   documentation:

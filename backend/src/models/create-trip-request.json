@@ -8,7 +8,9 @@
         "updatedAt": { "type": "string" },
         "name": { "type": "string" },
         "startPoint": { "type": "string" },
+        "startGeo": { "type": "string" },
         "endPoint": { "type": "string" },
+        "endGeo": { "type": "string" },
         "wayPoints": { "type": "string" },
         "weatherPoints": { "type": "string" },
         "tripIconUrl": { "type": "string" }
