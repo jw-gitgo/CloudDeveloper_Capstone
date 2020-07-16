@@ -4,15 +4,10 @@ import { CreateTripRequest } from '../../requests/CreateTripRequest';
 import * as uuid from 'uuid';
 import { decode } from 'jsonwebtoken';
 import { JwtPayload } from '../../auth/JwtPayload';
-import Axios from 'axios';
 import * as AWS from 'aws-sdk'
 import { createLogger } from '../../utils/logger';
+import { getCoordinates } from '../utils'
 const logger = createLogger('createTrip');
-
-const routeAPIKey = process.env.ROUTE_API_KEY
-const routeAPIUrl = 'https://api.openrouteservice.org/geocode/search?api_key=';
-const regex = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g;
-const coordsRegex = /[!"#$%&'()*+/:;<=>?@[\]^_`{|}~]/g;
 
 const docClient = new AWS.DynamoDB.DocumentClient()
 const tripsTable = process.env.TRIPS_TABLE
@@ -53,11 +48,9 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   const decodedJwt = decode(jwtToken) as JwtPayload
   const userId = decodedJwt.sub;
   const createdAt = new Date(Date.now()).toISOString();
+  const startGeo = getCoordinates(newTrip.startPoint);
+  const endGeo = getCoordinates(newTrip.endPoint);
 
-  const cleanedStart1 = newTrip.startPoint.replace(regex, '');
-  const cleanedStart2 = cleanedStart1.replace(' ', '%20');
-  const routing = await Axios.get(routeAPIUrl+routeAPIKey+'&text='+cleanedStart2);
-  const startGeo = JSON.stringify(routing.data.features[0].geometry.coordinates).replace(coordsRegex, '');
   
 
   const tripItem = {
@@ -66,7 +59,8 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     createdAt,
     tripIconUrl: `https://${process.env.S3_BUCKET}.s3.amazonaws.com/${tripId}`,
     ...newTrip,
-    startGeo
+    startGeo,
+    endGeo
   };
 
   await docClient.put({
