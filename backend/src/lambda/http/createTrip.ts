@@ -48,8 +48,8 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   const decodedJwt = decode(jwtToken) as JwtPayload
   const userId = decodedJwt.sub;
   const createdAt = new Date(Date.now()).toISOString();
-  const startGeo = getCoordinates(newTrip.startPoint);
-  const endGeo = getCoordinates(newTrip.endPoint);
+  const startGeo = await getCoordinates(newTrip.startPoint);
+  const endGeo = await getCoordinates(newTrip.endPoint);
 
   
 
