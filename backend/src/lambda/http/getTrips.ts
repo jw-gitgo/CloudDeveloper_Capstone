@@ -67,5 +67,5 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
 
 async function getCoordinates (cleanedStart2: string): Promise<string> {
   const location = await Axios.get(routeAPIUrl+routeAPIKey+'&text='+cleanedStart2);
-  return location.data.features.geometry.coordinates;
+  return JSON.stringify(location.data.features[0].geometry.coordinates);
 }
