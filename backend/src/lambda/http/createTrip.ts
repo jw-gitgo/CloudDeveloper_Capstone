@@ -56,7 +56,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   const cleanedStart1 = newTrip.startPoint.replace(regex, '');
   const cleanedStart2 = cleanedStart1.replace(' ', '%20');
   const routing = await Axios.get(routeAPIUrl+routeAPIKey+'&text='+cleanedStart2);
-  const startGeo = routing.data.features[0].geometry.coordinates;
+  const startGeo = JSON.stringify(routing.data.features[0].geometry.coordinates);
   
 
   const tripItem = {
