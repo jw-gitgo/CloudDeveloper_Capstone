@@ -24,6 +24,8 @@ interface TripsProps {
 }
 
 interface TripsState {
+  startPoint: string
+  endPoint: string
   trips: Trip[]
   newTripName: string
   loadingTrips: boolean
@@ -33,6 +35,8 @@ export class Trips extends React.PureComponent<TripsProps, TripsState> {
   state: TripsState = {
     trips: [],
     newTripName: '',
+    startPoint: '',
+    endPoint: '',
     loadingTrips: true
   }
 
@@ -49,7 +53,8 @@ export class Trips extends React.PureComponent<TripsProps, TripsState> {
       const dueDate = this.calculateDueDate()
       const newTrip = await createTrip(this.props.auth.getIdToken(), {
         name: this.state.newTripName,
-        dueDate
+        startPoint: this.state.startPoint,
+        endPoint: this.state.endPoint
       })
       this.setState({
         trips: [...this.state.trips, newTrip],
@@ -76,12 +81,12 @@ export class Trips extends React.PureComponent<TripsProps, TripsState> {
       const trip = this.state.trips[pos]
       await patchTrip(this.props.auth.getIdToken(), trip.tripId, {
         name: trip.name,
-        dueDate: trip.dueDate,
-        done: !trip.done
+        startPoint: trip.startPoint,
+        endPoint: trip.endPoint
       })
       this.setState({
         trips: update(this.state.trips, {
-          [pos]: { done: { $set: !trip.done } }
+          //[pos]: { done: { $set: !trip.done } }
         })
       })
     } catch {
@@ -165,14 +170,17 @@ export class Trips extends React.PureComponent<TripsProps, TripsState> {
               <Grid.Column width={1} verticalAlign="middle">
                 <Checkbox
                   onChange={() => this.onTripCheck(pos)}
-                  checked={trip.done}
+                  //checked={trip.done}
                 />
               </Grid.Column>
               <Grid.Column width={10} verticalAlign="middle">
                 {trip.name}
               </Grid.Column>
               <Grid.Column width={3} floated="right">
-                {trip.dueDate}
+                {trip.startPoint}
+              </Grid.Column>
+              <Grid.Column width={3} floated="right">
+                {trip.endPoint}
               </Grid.Column>
               <Grid.Column width={1} floated="right">
                 <Button

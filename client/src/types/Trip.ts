@@ -10,4 +10,5 @@ export interface Trip {
   endGeo: string
   wayPoints: string
   weatherPoints: string
+  tripIconUrl: string
 }
