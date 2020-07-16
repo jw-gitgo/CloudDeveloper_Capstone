@@ -4,7 +4,6 @@ import { decode } from 'jsonwebtoken';
 import { JwtPayload } from '../../auth/JwtPayload';
 import * as AWS from 'aws-sdk'
 import { createLogger } from '../../utils/logger';
-import { getCoordinates } from '../utils'
 const logger = createLogger('getTrips');
 
 const docClient = new AWS.DynamoDB.DocumentClient()
@@ -30,13 +29,6 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   }).promise();
 
   const items = result.Items;
-
-///////////////////////////////////////////////
-
-  items.forEach(async function(item) {
-    item.startGeo = await getCoordinates(item.startPoint);
-    item.endGeo = await getCoordinates(item.endPoint);
-  }); 
 
   return {
     statusCode: 200,
