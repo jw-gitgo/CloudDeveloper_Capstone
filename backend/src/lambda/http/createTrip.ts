@@ -12,6 +12,7 @@ const logger = createLogger('createTrip');
 const routeAPIKey = process.env.ROUTE_API_KEY
 const routeAPIUrl = 'https://api.openrouteservice.org/geocode/search?api_key=';
 const regex = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g;
+const numsRegex = /[!"#$%&'()*+,/:;<=>?@[\]^_`{|}~]/g;
 
 const docClient = new AWS.DynamoDB.DocumentClient()
 const tripsTable = process.env.TRIPS_TABLE
@@ -56,7 +57,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   const cleanedStart1 = newTrip.startPoint.replace(regex, '');
   const cleanedStart2 = cleanedStart1.replace(' ', '%20');
   const routing = await Axios.get(routeAPIUrl+routeAPIKey+'&text='+cleanedStart2);
-  const startGeo = JSON.stringify(routing.data.features[0].geometry.coordinates).replace('[]', '');
+  const startGeo = JSON.stringify(routing.data.features[0].geometry.coordinates).replace(numsRegex, '');
   
 
   const tripItem = {
