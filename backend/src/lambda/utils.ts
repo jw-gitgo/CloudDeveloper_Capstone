@@ -31,7 +31,6 @@ export async function getCoordinates(location: string): Promise<string> {
 }
 
 export async function getRoute(startGeo: string, endGeo: string): Promise<string> {
-  console.log(routeAPIUrl+routeAPIKey+'&start='+startGeo+'&end='+endGeo);
   const routing = await Axios.get(routeAPIUrl+routeAPIKey+'&start='+startGeo+'&end='+endGeo);
   const route = JSON.stringify(routing.data.features[0]);
   return route;

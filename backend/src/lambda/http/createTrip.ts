@@ -51,8 +51,8 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   const startGeo = await getCoordinates(newTrip.startPoint);
   const endGeo = await getCoordinates(newTrip.endPoint);
   const route = JSON.parse(await getRoute(startGeo,endGeo));
-  const distance = route.properties.segments[0].distance;
-  const duration = route.properties.segments[0].duration;
+  const distance = parseFloat(route.properties.segments[0].distance)/1609;
+  const duration = parseFloat(route.properties.segments[0].duration)/3600;
 
   
 
