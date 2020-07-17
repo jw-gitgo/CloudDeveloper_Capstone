@@ -6,7 +6,7 @@ import { decode } from 'jsonwebtoken';
 import { JwtPayload } from '../../auth/JwtPayload';
 import * as AWS from 'aws-sdk'
 import { createLogger } from '../../utils/logger';
-import { getCoordinates, getDistance } from '../utils'
+import { getCoordinates, getRoute } from '../utils'
 const logger = createLogger('createTrip');
 
 const docClient = new AWS.DynamoDB.DocumentClient()
@@ -50,7 +50,9 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   const createdAt = new Date(Date.now()).toISOString();
   const startGeo = await getCoordinates(newTrip.startPoint);
   const endGeo = await getCoordinates(newTrip.endPoint);
-  const distance = await getDistance(startGeo,endGeo);
+  const route = JSON.parse(await getRoute(startGeo,endGeo));
+  const distance = route.properties.segments[0].distance;
+  const duration = route.properties.segments[0].duration;
 
   
 
@@ -62,7 +64,8 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     ...newTrip,
     startGeo,
     endGeo,
-    distance
+    distance,
+    duration
   };
 
   await docClient.put({
