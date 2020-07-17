@@ -16,6 +16,8 @@ I intend to focus on the backend of the application, primarily the trip creation
 - startGeo (string) - starting lat/lon coordinate
 - endPoint (string) - ending point of the trip
 - endGeo (string) - ending lat/lon coordinate
+- distance (string) - distance in miles
+- duration (string) - estimated trip duration in hours and minutes
 - wayPoints (array of strings) - waypoints along the trip route
 - weatherPoints (array of strings) - corresponding weather at each waypoint
 - tripIconUrl (string) - the URL of the trip icon that a user can optionally upload

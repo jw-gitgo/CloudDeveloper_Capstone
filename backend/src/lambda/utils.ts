@@ -28,3 +28,9 @@ export async function getCoordinates(location: string): Promise<string> {
   const geoLoc = JSON.stringify(routing.data.features[0].geometry.coordinates).replace(coordsRegex, '');
   return geoLoc;
 }
+
+export async function getDistance(startGeo: string, endGeo: string): Promise<string> {
+  const routing = await Axios.get(routeAPIUrl+routeAPIKey+'&start='+startGeo+'&end='+endGeo);
+  const distance = routing.data.features[0].properties.segments[0].distance;
+  return distance;
+}

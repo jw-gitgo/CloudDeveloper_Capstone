@@ -8,6 +8,8 @@ export interface Trip {
   startGeo: string
   endPoint: string
   endGeo: string
+  distance: string
+  duration: string
   wayPoints: string
   weatherPoints: string
   tripIconUrl: string
