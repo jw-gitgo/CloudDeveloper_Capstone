@@ -13,8 +13,8 @@
         "endGeo": { "type": "string" },
         "distance": { "type": "string" },
         "duration": { "type": "string" },
-        "wayPoints": { "type": "string" },
-        "weatherPoints": { "type": "string" },
+        "steps": { "type": "string" },
+        "weather": { "type": "string" },
         "tripIconUrl": { "type": "string" }
     },
     "required": [

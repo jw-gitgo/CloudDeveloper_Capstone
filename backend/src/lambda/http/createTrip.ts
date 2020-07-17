@@ -48,13 +48,15 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   const decodedJwt = decode(jwtToken) as JwtPayload
   const userId = decodedJwt.sub;
   const createdAt = new Date(Date.now()).toISOString();
+
   const startGeo = await getCoordinates(newTrip.startPoint);
   const endGeo = await getCoordinates(newTrip.endPoint);
   const route = JSON.parse(await getRoute(startGeo,endGeo));
-  const distance = parseFloat(route.properties.segments[0].distance)/1609;
-  const duration = parseFloat(route.properties.segments[0].duration)/3600;
+  const distance = (parseFloat(route.properties.segments[0].distance)/1609).toFixed(2);
+  const duration = (parseFloat(route.properties.segments[0].duration)/3600).toFixed(2);
+  const steps = route.properties.segments[0].steps;
 
-  
+  const weather = await getWeather(startGeo, quarterGeo, halfGeo, threequarterGeo, endGeo, duration);
 
   const tripItem = {
     userId,
@@ -65,7 +67,9 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     startGeo,
     endGeo,
     distance,
-    duration
+    duration,
+    weather,
+    steps
   };
 
   await docClient.put({

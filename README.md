@@ -18,17 +18,17 @@ I intend to focus on the backend of the application, primarily the trip creation
 - endGeo (string) - ending lat/lon coordinate
 - distance (string) - distance in miles
 - duration (string) - estimated trip duration in hours and minutes
-- wayPoints (array of strings) - waypoints along the trip route
-- weatherPoints (array of strings) - corresponding weather at each waypoint
+- steps (array of strings) - steps along the trip route
+- weather (array of strings) - corresponding weather at each waypoint
 - tripIconUrl (string) - the URL of the trip icon that a user can optionally upload
 
 ## Logical Flow
 1. User logs into application using OAuth - userId is passed to application via browser
 2. getTrips loads all trips for the provided userId
-    - startPoint and endPoint for each trip are passed to OpenRouteService API - wayPoints list is updated
-    - wayPoints are passed to OpenWeatherMap API - weatherPoints list is updated
+    - startPoint and endPoint for each trip are passed to OpenRouteService API - steps list is updated
+    - steps are passed to OpenWeatherMap API - weather list is updated
     - If both API calls are successful, updatedAt date is updated to the current date and time
-    - If either API call fails, the previous wayPoints, weatherPoints, and updatedAt values are retained
+    - If either API call fails, the previous steps, weather, and updatedAt values are retained
 3. User can create new trip by providing name, startPoint, and endPoint
 
 # Functions to be implemented
