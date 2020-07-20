@@ -3,7 +3,7 @@ import { parseUserId } from "../auth/utils";
 import Axios from 'axios';
 
 const routeAPIKey = process.env.ROUTE_API_KEY
-const weatherAPIKey = process.env.ROUTE_WEATHER_KEY
+const weatherAPIKey = process.env.WEATHER_API_KEY
 const geoAPIUrl = 'https://api.openrouteservice.org/geocode/search?api_key=';
 const routeAPIUrl = 'https://api.openrouteservice.org/v2/directions/driving-car?api_key=';
 const weatherAPIUrl = 'https://api.openweathermap.org/data/2.5/onecall?lat=';
