@@ -58,9 +58,13 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
 
   const wayPointCount = route.properties.way_points[1];
   console.log("wayPointCount: ",wayPointCount);
+  console.log("quarter waypoint:  ", Math.round(wayPointCount/4));
   const quarterGeo = route.geometry.coordinates[0][Math.round(wayPointCount/4)];
+  console.log("quarterGeo: ", quarterGeo);
   const halfGeo = route.geometry.coordinates[0][Math.round(wayPointCount/2)];
+  console.log("halfGeo: ", halfGeo);
   const threequarterGeo = route.geometry.coordinates[0][Math.round(wayPointCount*3/4)];
+  console.log("threequarterGeo: ", threequarterGeo);
 
   const weather = await getWeather(startGeo, quarterGeo, halfGeo, threequarterGeo, endGeo, duration);
   console.log("weather: ", weather);
