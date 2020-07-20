@@ -6,7 +6,7 @@ import { decode } from 'jsonwebtoken';
 import { JwtPayload } from '../../auth/JwtPayload';
 import * as AWS from 'aws-sdk'
 import { createLogger } from '../../utils/logger';
-import { getCoordinates, getRoute } from '../utils'
+import { getCoordinates, getRoute, getWeather } from '../utils'
 const logger = createLogger('createTrip');
 
 const docClient = new AWS.DynamoDB.DocumentClient()
@@ -56,7 +56,13 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   const duration = (parseFloat(route.properties.segments[0].duration)/3600).toFixed(2);
   const steps = route.properties.segments[0].steps;
 
+  const wayPointCount = route.properties.way_points[1];
+  const quarterGeo = route.features[0].geometry.coordinates[0][Math.round(wayPointCount/4)];
+  const halfGeo = route.features[0].geometry.coordinates[0][Math.round(wayPointCount/2)];
+  const threequarterGeo = route.features[0].geometry.coordinates[0][Math.round(wayPointCount*3/4)];
+
   const weather = await getWeather(startGeo, quarterGeo, halfGeo, threequarterGeo, endGeo, duration);
+  console.log(weather);
 
   const tripItem = {
     userId,
