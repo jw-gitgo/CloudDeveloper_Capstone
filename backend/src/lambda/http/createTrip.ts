@@ -9,6 +9,8 @@ import { createLogger } from '../../utils/logger';
 import { getCoordinates, getRoute, getWeather } from '../utils'
 const logger = createLogger('createTrip');
 
+const coordsRegex = /[!"#$%&'()*+/:;<=>?@[\]^_`{|}~]/g;
+
 const docClient = new AWS.DynamoDB.DocumentClient()
 const tripsTable = process.env.TRIPS_TABLE
 
@@ -59,11 +61,11 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   const wayPointCount = route.properties.way_points[1];
   console.log("wayPointCount: ",wayPointCount);
   console.log("quarter waypoint:  ", Math.round(wayPointCount/4));
-  const quarterGeo = route.geometry.coordinates[0][Math.round(wayPointCount/4)];
+  const quarterGeo = JSON.stringify(route.geometry.coordinates[0][Math.round(wayPointCount/4)]).replace(coordsRegex, '');
   console.log("quarterGeo: ", quarterGeo);
-  const halfGeo = route.geometry.coordinates[0][Math.round(wayPointCount/2)];
+  const halfGeo = JSON.stringify(route.geometry.coordinates[0][Math.round(wayPointCount/2)]).replace(coordsRegex, '');
   console.log("halfGeo: ", halfGeo);
-  const threequarterGeo = route.geometry.coordinates[0][Math.round(wayPointCount*3/4)];
+  const threequarterGeo = JSON.stringify(route.geometry.coordinates[0][Math.round(wayPointCount*3/4)]).replace(coordsRegex, '');
   console.log("threequarterGeo: ", threequarterGeo);
 
   const weather = await getWeather(startGeo, quarterGeo, halfGeo, threequarterGeo, endGeo, duration);
