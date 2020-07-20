@@ -60,14 +60,14 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
 
   const wayPointCount = route.properties.way_points[1];
   console.log("wayPointCount: ", wayPointCount);
-  console.log("first waypoint: ", route.geometry.coordinates[0][0]);
+  console.log("first waypoint: ", route.geometry.coordinates[0]);
   console.log("quarter waypoint:  ", Math.round(wayPointCount/4));
-  console.log("quarterGeo should be: ", route.geometry.coordinates[0][951]);
-  const quarterGeo = JSON.stringify(route.geometry.coordinates[0][Math.round(wayPointCount/4)]).replace(coordsRegex, '');
+  console.log("quarterGeo should be: ", route.geometry.coordinates[951]);
+  const quarterGeo = JSON.stringify(route.geometry.coordinates[Math.round(wayPointCount/4)]).replace(coordsRegex, '');
   console.log("quarterGeo: ", quarterGeo);
-  const halfGeo = JSON.stringify(route.geometry.coordinates[0][Math.round(wayPointCount/2)]).replace(coordsRegex, '');
+  const halfGeo = JSON.stringify(route.geometry.coordinates[Math.round(wayPointCount/2)]).replace(coordsRegex, '');
   console.log("halfGeo: ", halfGeo);
-  const threequarterGeo = JSON.stringify(route.geometry.coordinates[0][Math.round(wayPointCount*3/4)]).replace(coordsRegex, '');
+  const threequarterGeo = JSON.stringify(route.geometry.coordinates[Math.round(wayPointCount*3/4)]).replace(coordsRegex, '');
   console.log("threequarterGeo: ", threequarterGeo);
 
   const weather = await getWeather(startGeo, quarterGeo, halfGeo, threequarterGeo, endGeo, duration);
