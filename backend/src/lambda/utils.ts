@@ -51,17 +51,46 @@ export async function getWeather(startGeo: string, quarterGeo: string, halfGeo,
 
     console.log(weatherAPIUrl+pt0[1]+'&lon='+pt0[0]+'&exclude=minutely,daily&appid='+weatherAPIKey+'&units=imperial')
     const wt0 = (await Axios.get(weatherAPIUrl+pt0[1]+'&lon='+pt0[0]+'&exclude=minutely,daily&appid='
-      +weatherAPIKey+'&units=imperial')).data.hourly.weather[0].main;
+      +weatherAPIKey+'&units=imperial')).data.hourly[0];
+    console.log("wt0: ", wt0);
+    console.log("Math.round(t1): ", Math.round(t1));
     const wt1 = (await Axios.get(weatherAPIUrl+pt1[1]+'&lon='+pt1[0]+'&exclude=minutely,daily&appid='
-      +weatherAPIKey+'&units=imperial')).data.hourly.weather[Math.round(t1)].main;
+      +weatherAPIKey+'&units=imperial')).data.hourly[Math.round(t1)];
     const wt2 = (await Axios.get(weatherAPIUrl+pt2[1]+'&lon='+pt2[0]+'&exclude=minutely,daily&appid='
-    +weatherAPIKey+'&units=imperial')).data.hourly.weather[Math.round(t2)].main;
+    +weatherAPIKey+'&units=imperial')).data.hourly[Math.round(t2)];
     const wt3 = (await Axios.get(weatherAPIUrl+pt3[1]+'&lon='+pt3[0]+'&exclude=minutely,daily&appid='
-    +weatherAPIKey+'&units=imperial')).data.hourly.weather[Math.round(t3)].main;
+    +weatherAPIKey+'&units=imperial')).data.hourly[Math.round(t3)];
     const wt4 = (await Axios.get(weatherAPIUrl+pt4[1]+'&lon='+pt4[0]+'&exclude=minutely,daily&appid='
-    +weatherAPIKey+'&units=imperial')).data.hourly.weather[Math.round(parseFloat(duration))].main;
+    +weatherAPIKey+'&units=imperial')).data.hourly[Math.round(parseFloat(duration))];
 
-    return '{ Start, '+wt0+' } { '+t1.toFixed(2)+' hrs, '+wt1+' } { '+t2.toFixed(2)+' hrs, '+wt2+
-    ' } { '+t3.toFixed(2)+' hrs, '+wt3+' } { End: '+parseFloat(duration).toFixed(2)+' hrs, '+wt4+' }'
+    const desc0 = wt0.weather[0].description;
+    const desc1 = wt1.weather[0].description;
+    const desc2 = wt2.weather[0].description;
+    const desc3 = wt3.weather[0].description;
+    const desc4 = wt4.weather[0].description;
+
+    const temp0 = wt0.temp;
+    const temp1 = wt1.temp;
+    const temp2 = wt2.temp;
+    const temp3 = wt3.temp;
+    const temp4 = wt4.temp;
+
+    const vis0 = wt0.visibility;
+    const vis1 = wt1.visibility;
+    const vis2 = wt2.visibility;
+    const vis3 = wt3.visibility;
+    const vis4 = wt4.visibility;
+
+    const wind0 = wt0.wind_speed;
+    const wind1 = wt1.wind_speed;
+    const wind2 = wt2.wind_speed;
+    const wind3 = wt3.wind_speed;
+    const wind4 = wt4.wind_speed;
+
+    return '{ Start, '+desc0+', '+temp0+' deg, '+vis0+' ft visibility, '+wind0+' mph wind } { '
+    +t1.toFixed(2)+' hrs, '+desc1+', '+temp1+' deg, '+vis1+' ft visibility, '+wind1+' mph wind } { '
+    +t2.toFixed(2)+' hrs, '+desc2+', '+temp2+' deg, '+vis2+' ft visibility, '+wind2+' mph wind } { '
+    +t3.toFixed(2)+' hrs, '+desc3+', '+temp3+' deg, '+vis3+' ft visibility, '+wind3+' mph wind } { End: '
+    +parseFloat(duration).toFixed(2)+' hrs, '+desc4+', '+temp4+' deg, '+vis4+' ft visibility, '+wind4+' mph wind }'
 
   }
