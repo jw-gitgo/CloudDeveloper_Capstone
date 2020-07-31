@@ -1,0 +1,388 @@
+{
+	"info": {
+		"_postman_id": "8b9b5008-c74e-4580-ba50-b1f298644ff9",
+		"name": "TRIP PROJECT",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "TRIPs",
+			"item": [
+				{
+					"name": "Get all trips",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/dev/trips",
+							"protocol": "https",
+							"host": [
+								"{{apiId}}",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"dev",
+								"trips"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create trip",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Summer Vacation\",\n\t\"startPoint\": \"Los Angeles, CA\",\n\t\"endPoint\": \"Pittsburgh, PA\"\n}"
+						},
+						"url": {
+							"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/dev/trips",
+							"protocol": "https",
+							"host": [
+								"{{apiId}}",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"dev",
+								"trips"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update trip",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"todoId\": \"81b5e4c8-e7f4-46de-9881-18638545ffa2\",\n\t\"name\": \"Change the world\",\n\t\"dueDate\": \"2019-12-11\",\n\t\"done\": true\n}"
+						},
+						"url": {
+							"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/dev/trips/35dd600f-43c2-4649-903c-615e1586a26f",
+							"protocol": "https",
+							"host": [
+								"{{apiId}}",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"dev",
+								"trips",
+								"35dd600f-43c2-4649-903c-615e1586a26f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete trip",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/dev/trips/513e7b28-0190-4776-bd80-1e6d138d7c37",
+							"protocol": "https",
+							"host": [
+								"{{apiId}}",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"dev",
+								"trips",
+								"513e7b28-0190-4776-bd80-1e6d138d7c37"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get attachment URL",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/dev/trips/3836b777-9bc4-4429-9b79-ba4e4f5f91c0/attachment",
+							"protocol": "https",
+							"host": [
+								"{{apiId}}",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"dev",
+								"trips",
+								"3836b777-9bc4-4429-9b79-ba4e4f5f91c0",
+								"attachment"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "cd54ab39-306e-48bd-90c2-da6c054cc1fc",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "b6c3dbee-5d6f-4bcb-971a-ac99df981f34",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "OpenRouteService",
+			"item": [
+				{
+					"name": "Location Search",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.openrouteservice.org/geocode/search?api_key={{ORS_api_key}}&text=Cincinnati%20OH",
+							"protocol": "https",
+							"host": [
+								"api",
+								"openrouteservice",
+								"org"
+							],
+							"path": [
+								"geocode",
+								"search"
+							],
+							"query": [
+								{
+									"key": "api_key",
+									"value": "{{ORS_api_key}}"
+								},
+								{
+									"key": "text",
+									"value": "Cincinnati%20OH"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Route Finding",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.openrouteservice.org/v2/directions/driving-car?api_key={{ORS_api_key}}&start=-84.543959,39.14767&end=-79.936305,40.450509",
+							"protocol": "https",
+							"host": [
+								"api",
+								"openrouteservice",
+								"org"
+							],
+							"path": [
+								"v2",
+								"directions",
+								"driving-car"
+							],
+							"query": [
+								{
+									"key": "api_key",
+									"value": "{{ORS_api_key}}"
+								},
+								{
+									"key": "start",
+									"value": "-84.543959,39.14767"
+								},
+								{
+									"key": "end",
+									"value": "-79.936305,40.450509"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "OpenWeather",
+			"item": [
+				{
+					"name": "Hourly Forecast",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.openweathermap.org/data/2.5/onecall?lat=39.2689&lon=-84.2638&exclude=minutely,daily&appid={{OW_api_key}}&units=imperial",
+							"protocol": "https",
+							"host": [
+								"api",
+								"openweathermap",
+								"org"
+							],
+							"path": [
+								"data",
+								"2.5",
+								"onecall"
+							],
+							"query": [
+								{
+									"key": "lat",
+									"value": "39.2689"
+								},
+								{
+									"key": "lon",
+									"value": "-84.2638"
+								},
+								{
+									"key": "exclude",
+									"value": "minutely,daily"
+								},
+								{
+									"key": "appid",
+									"value": "{{OW_api_key}}"
+								},
+								{
+									"key": "units",
+									"value": "imperial"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "83e21c74-77f8-492c-8ead-1c94d4c0c644",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "3b5668c8-85fb-4f75-baaf-9f50471d0117",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "58947193-331c-4d6c-8c01-91e98cc10094",
+			"key": "apiId",
+			"value": "181i7ctub6"
+		},
+		{
+			"id": "dd1f2894-682e-4fd6-9dc8-698872ccc1eb",
+			"key": "authToken",
+			"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik8wMTZwZzR2NGwxUkx6TWtWS3RhbyJ9.eyJpc3MiOiJodHRwczovL2Rldi1iMG5icTMxZS51cy5hdXRoMC5jb20vIiwic3ViIjoiZ29vZ2xlLW9hdXRoMnwxMDE4NTU4MTU2NzYxMzg5NzA2ODMiLCJhdWQiOiI4Q0J4YzUxTWFuOUJBUk9CN2xQdzAwUGxOVFFncDdKaSIsImlhdCI6MTU5NjIyMzgwOSwiZXhwIjoxNTk2MjU5ODA5LCJhdF9oYXNoIjoiOEp0cjFnaTdZQkw1TzhYQW1nZWhvZyIsIm5vbmNlIjoidXk3ejhiX3BIMDJvNDN-Lk5Ub0VyMlBkYklLVFUxTWsifQ.GmOdLc8hxUQG5pFNr8PM0s2UrIiOIG-64RpBFLG3eLLADsL_9pGmQ8kK-7Sa1KlA87zidZSbReemwrpu4kzbMyY-4JLTvLbNdzEGWIdMb6-c1p6JdD1DG8jMgwHfshUyxZCehj8EETSfPTWsWQPByWDYZccAh4DJ3XVUjVEkbuMFYwOXCNWP467H1rbs8xTWuMWpT7aNkpmKAEjJVA7yH3G6taV9kx5iGb9X3_T-OSqFcbhUqh3jGCAiSlxrLR-Uelh_0rXeNc5gfFrMV2YVQPcMgF1ivsZimh-4E46_zsmUOZ2zp0xgEDjBddfnF_SKSoPvWtCTrKk9EvNoZHUWvw"
+		},
+		{
+			"id": "84b7ddf4-d4a2-42da-b31f-0fa9b2352bd6",
+			"key": "ORS_api_key",
+			"value": "5b3ce3597851110001cf62487a65e678a2e54ec181caf798e4271d99"
+		},
+		{
+			"id": "82d1a399-ef4a-4328-ab59-7150a5663651",
+			"key": "OW_api_key",
+			"value": "378b9931e4515a61c129b705606052bc"
+		}
+	],
+	"protocolProfileBehavior": {}
+}

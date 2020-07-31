@@ -1,10 +1,10 @@
 # Cloud Developer Capstone Project - Driving Conditions App
 
-I intend to build a simple application that allows a user to submit a starting and ending geolocation, and then returns an optimized driving route, along with the anticipated weather at multiple points during the trip (assuming the user wants to leave now).  It will leverage publicly-available API's for route-finding and weather forecasts, and will allow the user to save defined trips for future retrieval.
+I intend to build a simple application that allows a user to submit a starting and ending location, and then returns an optimized driving route, along with the anticipated weather at multiple points during the trip (assuming the user wants to leave now).  It will leverage publicly-available API's for route-finding and weather forecasts, and will allow the user to save defined trips for future retrieval.  It is based on the Todo app from the previous project.
 
 # Functionality of the application
 
-I intend to focus on the backend of the application, primarily the trip creation, storage, and retrieval, using AWS Lambda and API Gateway, and the authentication, using OAuth.  I will provide only a very basic frontend, based on the one created in the serverless Todo project.
+I intend to focus on the backend of the application, primarily the trip creation, storage, update, and retrieval, using AWS Lambda and API Gateway, and the authentication, using OAuth.  I will provide only a very basic frontend, mostly to obtain the bearer authorization token.
 
 ## Data Structure
 - userId (string) - a unique id for the user, passed by OAuth
@@ -17,111 +17,39 @@ I intend to focus on the backend of the application, primarily the trip creation
 - endPoint (string) - ending point of the trip
 - endGeo (string) - ending lat/lon coordinate
 - distance (string) - distance in miles
-- duration (string) - estimated trip duration in hours and minutes
+- duration (string) - estimated trip duration in hours
+- weather (array of strings) - corresponding weather (time, weather description, temperature, visibility, windspeed) at regular intervals along the route (start, quarter-point, half-point, three-quarters-point, end)
 - steps (array of strings) - steps along the trip route
-- weather (array of strings) - corresponding weather at each waypoint
 - tripIconUrl (string) - the URL of the trip icon that a user can optionally upload
 
 ## Logical Flow
-1. User logs into application using OAuth - userId is passed to application via browser
-2. getTrips loads all trips for the provided userId
-    - startPoint and endPoint for each trip are passed to OpenRouteService API - steps list is updated
-    - steps are passed to OpenWeatherMap API - weather list is updated
-    - If both API calls are successful, updatedAt date is updated to the current date and time
-    - If either API call fails, the previous steps, weather, and updatedAt values are retained
-3. User can create new trip by providing name, startPoint, and endPoint
+1. [In Browser] User logs into application using OAuth - userId is passed to application via browser
+2. [In Browser] The user authorization token is provided and stored in the browser (copy this from the dev tools console)
+3. [In Browser] getTrips loads all trips for the provided userId in the browser
+4. [Using Postman] user creates trip by providing a trip name, starting location, and ending location
+    - startPoint and endPoint for each trip are passed to OpenRouteService API, which returns lat-long geo-coordinates.
+    - A subsequent call is made to the OpenRouteService API with the geocoordinates, which returns the driving steps and the geocoordinates of waypoints along the route.
+    - Geocoordinates are extracted from the driving route at regular intervals (start, quarter-point, half-point, three-quarters-point, end), and the estimated time-of-day at each waypoint is calculated.
+    - These geocoordinates and times-of-day are passed to OpenWeatherMap API, which returns the predicted weather and driving conditions at these five locations at the predicted times for when they will be reached by the driver.
+5. [Using Postman] User can also get all trips, update a trip, or delete a trip by ID.  Updating a trip also causes the route and weather data to be recalculated accordingly.
+6. [In Browser] Now that data exists for the user, the browser can be refreshed to list all trips.  The user can also update or delete the trips from the browser, or can upload an icon to represent the trip.
 
-# Functions to be implemented
+## Key Functions
 
-To implement this project you need to implement the following functions and configure them in the `serverless.yml` file:
-
-* `Auth` - this function should implement a custom authorizer for API Gateway that should be added to all other functions.
-* `GetTrips` - should return all TRIPs for a current user. 
-* `CreateTrip` - should create a new TRIP for a current user. A shape of data send by a client application to this function can be found in the `CreateTripRequest.ts` file
-* `UpdateTrip` - should update a TRIP item created by a current user. A shape of data send by a client application to this function can be found in the `UpdateTripRequest.ts` file
-* `DeleteTrip` - should delete a TRIP item created by a current user. Expects an id of a TRIP item to remove.
+* `Auth` - this function implements a custom authorizer for API Gateway that is used by all other functions
+* `GetTrips` - return all TRIPs for a current user. 
+* `CreateTrip` - create a new TRIP for a current user. The shape of data sent by a client application to this function can be found in the `CreateTripRequest.ts` file
+* `UpdateTrip` - update a TRIP item created by a current user. The shape of data send by a client application to this function can be found in the `UpdateTripRequest.ts` file
+* `DeleteTrip` - delete a TRIP item created by a current user. Expects an id of a TRIP item to remove.
 * `GenerateUploadUrl` - returns a presigned url that can be used to upload an attachment file for a TRIP item. 
 
-All functions are already connected to appropriate events from API gateway
+## Frontend
 
-An id of a user can be extracted from a JWT token passed by a client
+The frontend was not the focus of this project.  The functionality was left largely untouched from the previous project.  It is only necessary for the OAuth login and obtaining the user authorization token for use in Postman.
 
-You also need to add any necessary resources to the `resources` section of the `serverless.yml` file such as DynamoDB table and and S3 bucket.
+# Deployment
 
-# Frontend
-
-The `client` folder contains a web application that can use the API that should be developed in the project.
-
-To use it please edit the `config.ts` file in the `client` folder:
-
-```ts
-const apiId = '...' API Gateway id
-export const apiEndpoint = `https://${apiId}.execute-api.us-east-1.amazonaws.com/dev`
-
-export const authConfig = {
-  domain: '...',    // Domain from Auth0
-  clientId: '...',  // Client id from an Auth0 application
-  callbackUrl: 'http://localhost:3000/callback'
-}
-```
-
-# Best practices
-
-To complete this exercise please follow the best practices from the 6th lesson of this course.
-
-# Suggestions
-
-To store TRIP items you might want to use a DynamoDB table with local secondary index(es). A create a local secondary index you need to a create a DynamoDB resource like this:
-
-```yml
-
-TripsTable:
-  Type: AWS::DynamoDB::Table
-  Properties:
-    AttributeDefinitions:
-      - AttributeName: partitionKey
-        AttributeType: S
-      - AttributeName: sortKey
-        AttributeType: S
-      - AttributeName: indexKey
-        AttributeType: S
-    KeySchema:
-      - AttributeName: partitionKey
-        KeyType: HASH
-      - AttributeName: sortKey
-        KeyType: RANGE
-    BillingMode: PAY_PER_REQUEST
-    TableName: ${self:provider.environment.TRIPS_TABLE}
-    LocalSecondaryIndexes:
-      - IndexName: ${self:provider.environment.INDEX_NAME}
-        KeySchema:
-          - AttributeName: partitionKey
-            KeyType: HASH
-          - AttributeName: indexKey
-            KeyType: RANGE
-        Projection:
-          ProjectionType: ALL # What attributes will be copied to an index
-
-```
-
-To query an index you need to use the `query()` method like:
-
-```ts
-await this.dynamoDBClient
-  .query({
-    TableName: 'table-name',
-    IndexName: 'index-name',
-    KeyConditionExpression: 'paritionKey = :paritionKey',
-    ExpressionAttributeValues: {
-      ':paritionKey': partitionKeyValue
-    }
-  })
-  .promise()
-```
-
-# How to run the application
-
-## Backend
+## Backend Deployment
 
 To deploy an application run the following commands:
 
@@ -131,7 +59,7 @@ npm install
 sls deploy -v
 ```
 
-## Frontend
+## Frontend Deployment
 
 To run a client application first edit the `client/src/config.ts` file to set correct parameters. And then run the following commands
 
@@ -143,29 +71,6 @@ npm run start
 
 This should start a development server with the React application that will interact with the serverless TRIP application.
 
-# Postman collection
+## Postman collection
 
-An alternative way to test your API you can use the Postman collection that contains sample requests. You can find a Postman collection in this project. To import this collection do the following.
-
-Click on the import button:
-
-![Alt text](images/import-collection-1.png?raw=true "Image 1")
-
-
-Click on the "Choose Files":
-
-![Alt text](images/import-collection-2.png?raw=true "Image 2")
-
-
-Select a file to import:
-
-![Alt text](images/import-collection-3.png?raw=true "Image 3")
-
-
-Right click on the imported collection to set variables for the collection:
-
-![Alt text](images/import-collection-4.png?raw=true "Image 4")
-
-Provide variables for the collection (similarly to how this was done in the course):
-
-![Alt text](images/import-collection-5.png?raw=true "Image 5")
+An updated Postman collection is provided in this project.  It uses the same basic structure and methods as the Todo project.
