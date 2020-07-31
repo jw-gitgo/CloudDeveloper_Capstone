@@ -1,5 +1,5 @@
 service:
-  name: serverless-todo-app
+  name: serverless-trip-app
 
 plugins:
   - serverless-webpack
@@ -11,36 +11,37 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'us-east-1'}
   environment:
-    TODOS_TABLE: jw-todos-table-${self:provider.stage}
-    INDEX_NAME: todoId
-    S3_BUCKET: jw-udacity-todos-bucket-${self:provider.stage}
-    AUTH_0_SECRET_ID: Auth0Secret-${self:provider.stage}
-    AUTH_0_SECRET_FIELD: auth0Secret
+    TRIPS_TABLE: jw-trips-table-${self:provider.stage}
+    INDEX_NAME: tripId
+    S3_BUCKET: jw-udacity-trips-bucket-${self:provider.stage}
+    ROUTE_API_KEY: 5b3ce3597851110001cf62487a65e678a2e54ec181caf798e4271d99
+    WEATHER_API_KEY: 378b9931e4515a61c129b705606052bc
+
 
 custom:
   documentation:
     api:
       info:
         version: v1.0.0
-        title: Todos API
-        description: Serverless application for tracking 'todos'
+        title: Trips API
+        description: Serverless application for tracking 'trips'
     models:
-      - name: TodoRequest
+      - name: TripRequest
         contentType: application/json
-        schema: ${file(src/models/create-todo-request.json)}
+        schema: ${file(src/models/create-trip-request.json)}
 
 functions:
 
   Auth:
     handler: src/lambda/auth/auth0Authorizer.handler
 
-  # TODO: Configure this function
-  GetTodos:
-    handler: src/lambda/http/getTodos.handler
+  # TRIP: Configure this function
+  GetTrips:
+    handler: src/lambda/http/getTrips.handler
     events:
       - http:
           method: get
-          path: todos
+          path: trips
           cors: true
           authorizer: Auth
     iamRoleStatements:
@@ -49,62 +50,50 @@ functions:
           - dynamodb:Query
           - dynamodb:Scan
           - dynamodb:GetItem
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TRIPS_TABLE}
       - Effect: Allow
         Action:
           - dynamodb:Query
           - dynamodb:Scan
           - dynamodb:GetItem
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}/index/${self:provider.environment.INDEX_NAME}
-      - Effect: Allow
-        Action:
-          - secretsmanager:GetSecretValue
-        Resource: !Ref Auth0Secret
-      - Effect: Allow
-        Action:
-          - kms:Decrypt
-        Resource: !GetAtt KMSKey.Arn
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TRIPS_TABLE}/index/${self:provider.environment.INDEX_NAME}
 
-  # TODO: Configure this function
-  CreateTodo:
-    handler: src/lambda/http/createTodo.handler
+  # TRIP: Configure this function
+  CreateTrip:
+    handler: src/lambda/http/createTrip.handler
     events:
       - http:
           method: post
-          path: todos
+          path: trips
           cors: true
           authorizer: Auth
     request:
       # Schema that will be used to validate incoming requests
       schema:
-        application/json: ${file(src/models/create-todo-request.json)}
+        application/json: ${file(src/models/create-trip-request.json)}
     iamRoleStatements:
       - Effect: Allow
         Action:
           - dynamodb:PutItem
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
-      - Effect: Allow
-        Action:
-          - secretsmanager:GetSecretValue
-        Resource: !Ref Auth0Secret
-      - Effect: Allow
-        Action:
-          - kms:Decrypt
-        Resource: !GetAtt KMSKey.Arn
+          - dynamodb:UpdateItem
+          - dynamodb:GetItem
+          - dynamodb:Query
+          - dynamodb:Scan
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TRIPS_TABLE}
 
-  # TODO: Configure this function
-  UpdateTodo:
-    handler: src/lambda/http/updateTodo.handler
+  # TRIP: Configure this function
+  UpdateTrip:
+    handler: src/lambda/http/updateTrip.handler
     events:
       - http:
           method: patch
-          path: todos/{todoId}
+          path: trips/{tripId}
           cors: true
           authorizer: Auth
     request:
       # Schema that will be used to validate incoming requests
       schema:
-        application/json: ${file(src/models/create-todo-request.json)}
+        application/json: ${file(src/models/create-trip-request.json)}
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -112,31 +101,23 @@ functions:
           - dynamodb:GetItem
           - dynamodb:Query
           - dynamodb:Scan
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TRIPS_TABLE}
       - Effect: Allow
         Action:
           - dynamodb:UpdateItem
           - dynamodb:GetItem
           - dynamodb:Query
           - dynamodb:Scan
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}/index/${self:provider.environment.INDEX_NAME}
-      - Effect: Allow
-        Action:
-          - secretsmanager:GetSecretValue
-        Resource: !Ref Auth0Secret
-      - Effect: Allow
-        Action:
-          - kms:Decrypt
-        Resource: !GetAtt KMSKey.Arn
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TRIPS_TABLE}/index/${self:provider.environment.INDEX_NAME}
 
 
-  # TODO: Configure this function
-  DeleteTodo:
-    handler: src/lambda/http/deleteTodo.handler
+  # TRIP: Configure this function
+  DeleteTrip:
+    handler: src/lambda/http/deleteTrip.handler
     events:
       - http:
           method: delete
-          path: todos/{todoId}
+          path: trips/{tripId}
           cors: true
           authorizer: Auth
     iamRoleStatements:
@@ -144,29 +125,21 @@ functions:
         Action:
           - dynamodb:DeleteItem
           - dynamodb:GetItem
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TRIPS_TABLE}
       - Effect: Allow
         Action:
           - dynamodb:DeleteItem
           - dynamodb:GetItem
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}/index/${self:provider.environment.INDEX_NAME}
-      - Effect: Allow
-        Action:
-          - secretsmanager:GetSecretValue
-        Resource: !Ref Auth0Secret
-      - Effect: Allow
-        Action:
-          - kms:Decrypt
-        Resource: !GetAtt KMSKey.Arn
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TRIPS_TABLE}/index/${self:provider.environment.INDEX_NAME}
 
 
-  # TODO: Configure this function
+  # TRIP: Configure this function
   GenerateUploadUrl:
     handler: src/lambda/http/generateUploadUrl.handler
     events:
       - http:
           method: post
-          path: todos/{todoId}/attachment
+          path: trips/{tripId}/attachment
           cors: true
           authorizer: Auth
     iamRoleStatements: 
@@ -175,18 +148,10 @@ functions:
           - s3:GetObject
         Effect: Allow
         Resource: arn:aws:s3:::${self:provider.environment.S3_BUCKET}/*
-      - Effect: Allow
-        Action:
-          - secretsmanager:GetSecretValue
-        Resource: !Ref Auth0Secret
-      - Effect: Allow
-        Action:
-          - kms:Decrypt
-        Resource: !GetAtt KMSKey.Arn
 
 resources:
   Resources:
-    # TODO: Add any necessary AWS resources
+    # TRIP: Add any necessary AWS resources
     GatewayResponseDefault4XX: 
       Properties: 
         ResponseParameters: 
@@ -197,7 +162,7 @@ resources:
         RestApiId: 
           Ref: ApiGatewayRestApi
       Type: "AWS::ApiGateway::GatewayResponse"
-    TodoTable:
+    TripTable:
       Type: AWS::DynamoDB::Table
       Properties:
         AttributeDefinitions:
@@ -205,15 +170,15 @@ resources:
             AttributeType: S
           - AttributeName: createdAt
             AttributeType: S
-          - AttributeName: todoId
+          - AttributeName: tripId
             AttributeType: S
         KeySchema:
           - AttributeName: userId
             KeyType: HASH
-          - AttributeName: todoId
+          - AttributeName: tripId
             KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
-        TableName: ${self:provider.environment.TODOS_TABLE}
+        TableName: ${self:provider.environment.TRIPS_TABLE}
         LocalSecondaryIndexes:
           - IndexName: ${self:provider.environment.INDEX_NAME}
             KeySchema:
@@ -255,34 +220,3 @@ resources:
               Resource: "arn:aws:s3:::${self:provider.environment.S3_BUCKET}/*"
               Sid: PublicReadWriteBucketPolicy
           Version: "2012-10-17"
-    KMSKey:
-      Type: AWS::KMS::Key
-      Properties:
-        Description: KMS key to encrypt Auth0 secret
-        KeyPolicy:
-          Version: '2012-10-17'
-          Id: key-default-1
-          Statement:
-            - Sid: Allow administration of the key
-              Effect: Allow
-              Principal:
-                AWS:
-                  Fn::Join:
-                    - ':'
-                    - - 'arn:aws:iam:'
-                      - Ref: AWS::AccountId
-                      - 'root'
-              Action:
-                'kms:*'
-              Resource: '*'
-    KMSKeyAlias:
-      Type: AWS::KMS::Alias
-      Properties:
-        AliasName: alias/auth0Key-${self:provider.stage}
-        TargetKeyId: !Ref KMSKey
-    Auth0Secret:
-      Type: AWS::SecretsManager::Secret
-      Properties:
-        Name: ${self:provider.environment.AUTH_0_SECRET_ID}
-        Description: Auth0 secret
-        KmsKeyId: !Ref KMSKey

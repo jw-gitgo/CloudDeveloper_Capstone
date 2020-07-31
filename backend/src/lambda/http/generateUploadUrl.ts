@@ -8,9 +8,9 @@ const logger = createLogger('generateUploadUrl');
 const s3_bucket = process.env.S3_BUCKET
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  const todoId = event.pathParameters.todoId
+  const tripId = event.pathParameters.tripId
   logger.info('User was authorized', event)
-  // TODO: Return a presigned URL to upload a file for a TODO item with the provided id
+  // TRIP: Return a presigned URL to upload a file for a TRIP item with the provided id
   // INITIAL ATTEMPT BELOW, based on 4.2.3
 
   const s3 = new AWS.S3({
@@ -18,7 +18,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   })
   const presignedUrl = s3.getSignedUrl('putObject', { // The URL will allow to perform the PUT operation
     Bucket: s3_bucket, // Name of an S3 bucket
-    Key: todoId, // id of an object this URL allows access to
+    Key: tripId, // id of an object this URL allows access to
     Expires: '300'  // A URL is only valid for 5 minutes
   })
 

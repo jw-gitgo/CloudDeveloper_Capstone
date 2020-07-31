@@ -1,0 +1,24 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "trip",
+    "type": "object",
+    "properties": {
+        "tripId": { "type": "number" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" },
+        "name": { "type": "string" },
+        "startPoint": { "type": "string" },
+        "startGeo": { "type": "string" },
+        "endPoint": { "type": "string" },
+        "endGeo": { "type": "string" },
+        "distance": { "type": "string" },
+        "duration": { "type": "string" },
+        "steps": { "type": "string" },
+        "weather": { "type": "string" },
+        "tripIconUrl": { "type": "string" }
+    },
+    "required": [
+        "tripId"
+    ],
+    "additionalProperties": false
+}
